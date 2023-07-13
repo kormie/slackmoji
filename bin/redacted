@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Create a temporary directory
+temp_dir=$(mktemp -d -t redacted-XXXXX)
+
+# Get the string to be used in the GIF from the command line argument, or use "REDACTED" if no argument is given
+string=${1:-REDACTED}
+
+# Run the Python script
+python3 ./lib/redacted.py "$string" "$temp_dir"
+
+# Run the ImageMagick convert command
+convert -delay 3 -loop 0 "$temp_dir/frame_*.png" "redacted-$string.gif"
+
+# Remove the temporary directory
+rm -rf "$temp_dir"
